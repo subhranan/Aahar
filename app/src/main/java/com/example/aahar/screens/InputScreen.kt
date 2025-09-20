@@ -1,6 +1,5 @@
 package com.example.aahar.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InputScreen() {
+fun InputScreen(onGetRecipes: (String) -> Unit) {
     Scaffold(
     ) { innerPadding ->
         Column(
@@ -54,7 +53,7 @@ fun InputScreen() {
 
             OutlinedButton(
                 onClick = {
-                    // TODO: Navigate to Recipe screen later
+                    onGetRecipes(ingredients)
                 },
                 modifier = Modifier.width(256.dp)
             ) {
