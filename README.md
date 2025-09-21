@@ -32,3 +32,16 @@ Aahar is a simple Android app that helps you decide **what to cook with the ingr
 - **Backend AI:** Google Gemini AI (via Firebase AI)  
 - **Local Storage:** SharedPreferences
 
+## ⚠️ Disclaimer
+
+This app generates recipe suggestions using an AI model. The suggestions are for **informational purposes only**.  
+
+The app developer is **not responsible** for any inappropriate or unexpected outputs resulting from user input. Please avoid entering **offensive or illegal content**.  
+
+- Users should be **18+** or use under adult supervision.  
+- The app is intended for **personal, non-commercial use** only.  
+- The developer is **not liable** for any harm, damages, or legal issues resulting from misuse of the app or inappropriate inputs.  
+- The AI model may produce **unexpected or incorrect suggestions**. Always use your discretion before cooking or consuming any suggested recipes.
+
+
+
