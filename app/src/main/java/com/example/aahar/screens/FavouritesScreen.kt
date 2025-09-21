@@ -30,58 +30,66 @@ fun FavouritesScreen(context: Context) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier.padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
+        if (favourites.isEmpty()){
             Text(
-                text = "Favourites",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(16.dp)
+                text = "No items found",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(favourites) { item ->
-                Column {
-                    val trimmed = item.trim()
-                    val title: String
-                    val description: String
+        } else {
+            Box(
+                modifier = Modifier.padding(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Favourites",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(favourites) { item ->
+                    Column {
+                        val trimmed = item.trim()
+                        val title: String
+                        val description: String
 
-                    val regex = Regex("""^\*(.+?)\*\s*(.*)""")
-                    val match = regex.find(trimmed)
-                    if (match != null) {
-                        title = match.groupValues[1].trim()
-                        description = match.groupValues[2].trim()
-                    } else {
-                        val splitIndex = trimmed.indexOf(" ")
-                        if (splitIndex != -1) {
-                            title = trimmed.substring(0, splitIndex)
-                            description = trimmed.substring(splitIndex + 1)
+                        val regex = Regex("""^\*(.+?)\*\s*(.*)""")
+                        val match = regex.find(trimmed)
+                        if (match != null) {
+                            title = match.groupValues[1].trim()
+                            description = match.groupValues[2].trim()
                         } else {
-                            title = trimmed
-                            description = ""
+                            val splitIndex = trimmed.indexOf(" ")
+                            if (splitIndex != -1) {
+                                title = trimmed.substring(0, splitIndex)
+                                description = trimmed.substring(splitIndex + 1)
+                            } else {
+                                title = trimmed
+                                description = ""
+                            }
                         }
-                    }
 
-                    Text(text = title, style = MaterialTheme.typography.titleMedium)
-                    if (description.isNotEmpty()) {
-                        Text(
-                            text = description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 4.dp)
+                        Text(text = title, style = MaterialTheme.typography.titleMedium)
+                        if (description.isNotEmpty()) {
+                            Text(
+                                text = description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 4.dp),
+                            thickness = DividerDefaults.Thickness,
+                            color = DividerDefaults.color
                         )
                     }
-
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        thickness = DividerDefaults.Thickness,
-                        color = DividerDefaults.color
-                    )
                 }
             }
         }

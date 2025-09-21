@@ -47,7 +47,6 @@ fun RecipeScreen(context: Context, ingredients: String) {
     val recipes = remember { mutableStateListOf<String>() }
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
-    val favourites = remember { mutableStateListOf<String>() }
     val prefs = PrefsHelper(context)
 
     LaunchedEffect(ingredients) {
@@ -120,12 +119,21 @@ fun RecipeScreen(context: Context, ingredients: String) {
                     LaunchedEffect(swipeableState.currentValue) {
                         when (swipeableState.currentValue) {
                             1 -> { // Swiped Right
-                                val oldFavourites = prefs.getFavourites().toMutableList()
                                 val newRecipe = recipes[index]
-                                if (!oldFavourites.contains(newRecipe)) {
-                                    oldFavourites.add(newRecipe)
+
+                                // Only add valid recipes
+                                if (newRecipe.isNotBlank() &&
+                                    newRecipe != "Something went wrong. Please try again." &&
+                                    newRecipe != "No internet connection. Please try again."
+                                ) {
+                                    val oldFavourites = prefs.getFavourites().toMutableList()
+                                    if (!oldFavourites.contains(newRecipe)) {
+                                        oldFavourites.add(newRecipe)
+                                    }
+                                    prefs.saveFavourites(oldFavourites)
                                 }
-                                prefs.saveFavourites(oldFavourites)
+
+                                // Remove the card regardless of its content
                                 recipes.removeAt(index)
                             }
 
