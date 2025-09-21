@@ -25,12 +25,13 @@ class MainActivity : ComponentActivity() {
                     composable("input") {
                         InputScreen(
                             onGetRecipes = { ingredients ->
-                                navController.navigate("recipes")
+                                navController.navigate("recipes/$ingredients")
                             }
                         )
                     }
-                    composable("recipes") {
-                        RecipeScreen()
+                    composable("recipes/{ingredients}") { backStackEntry ->
+                        val ingredients = backStackEntry.arguments?.getString("ingredients") ?: ""
+                        RecipeScreen(ingredients)
                     }
                 }
             }

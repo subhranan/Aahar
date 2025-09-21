@@ -15,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -25,22 +27,25 @@ import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
+import com.example.aahar.ai.aiService
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun RecipeScreen() {
-    val recipes = remember {
-        mutableStateListOf(
-            "Tomato Pasta",
-            "Mango Smoothie",
-            "Chicken Curry",
-            "Veggie Wrap",
-            "Fried Rice",
-            "Paneer Tikka"
-        )
+fun RecipeScreen(ingredients: String) {
+    val recipes = remember { mutableStateListOf<String>() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(ingredients) {
+        scope.launch {
+            val ai = aiService()
+            val response: Collection<String> = ai.stuff(ingredients)
+            recipes.addAll(response)
+        }
     }
+
 
     Scaffold(
     ) { innerPadding ->
