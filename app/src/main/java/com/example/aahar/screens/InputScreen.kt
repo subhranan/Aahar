@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -67,8 +71,10 @@ fun InputScreen(navController: NavController, onGetRecipes: (String) -> Unit) {
 
             OutlinedTextField(
                 value = ingredients,
-                onValueChange = { ingredients = it
-                                errorText = "" },
+                onValueChange = {
+                    ingredients = it
+                    errorText = ""
+                },
                 label = { Text("e.g. tomato, onion, cheese") },
                 modifier = Modifier.fillMaxWidth(),
                 isError = errorText.isNotEmpty()
@@ -85,26 +91,38 @@ fun InputScreen(navController: NavController, onGetRecipes: (String) -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            OutlinedButton(
-                onClick = {
-                    if (ingredients.isBlank()) {
-                        errorText = "Input can't be empty"
-                    } else {
-                        onGetRecipes(ingredients)
-                    }
-                },
-                modifier = Modifier.width(256.dp)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp) // space between buttons
             ) {
-                Text("GO")
-            }
+                OutlinedButton(
+                    onClick = {
+                        if (ingredients.isBlank()) {
+                            errorText = "Input can't be empty"
+                        } else {
+                            onGetRecipes(ingredients)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black
+                    ),
+                    modifier = Modifier.weight(1f) // make it take equal space
+                ) {
+                    Text("GO")
+                }
 
-            OutlinedButton(
-                onClick = {
-                    navController.navigate("favourites")
-                },
-                modifier = Modifier.width(256.dp)
-            ) {
-                Text("View Saved Items")
+                Button(
+                    onClick = {
+                        navController.navigate("favourites")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.weight(1f) // equal space
+                ) {
+                    Text("View Saved Items")
+                }
             }
         }
     }
