@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.aahar.screens.FavouritesScreen
 import com.example.aahar.screens.InputScreen
 import com.example.aahar.screens.RecipeScreen
 import com.example.aahar.ui.theme.AaharTheme
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable("input") {
                         InputScreen(
+                            navController,
                             onGetRecipes = { ingredients ->
                                 navController.navigate("recipes/$ingredients")
                             }
@@ -31,7 +33,10 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("recipes/{ingredients}") { backStackEntry ->
                         val ingredients = backStackEntry.arguments?.getString("ingredients") ?: ""
-                        RecipeScreen(ingredients)
+                        RecipeScreen(this@MainActivity, ingredients)
+                    }
+                    composable("favourites"){
+                        FavouritesScreen(context = this@MainActivity)
                     }
                 }
             }

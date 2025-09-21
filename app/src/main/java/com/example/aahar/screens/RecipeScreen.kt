@@ -1,6 +1,6 @@
 package com.example.aahar.screens
 
-import android.R
+import android.content.Context
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,16 +36,19 @@ import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import com.example.aahar.ai.aiService
+import com.example.aahar.cache.PrefsHelper
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun RecipeScreen(ingredients: String) {
+fun RecipeScreen(context: Context, ingredients: String) {
     val recipes = remember { mutableStateListOf<String>() }
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
+    val favourites = remember { mutableStateListOf<String>() }
+    val prefs = PrefsHelper(context)
 
     LaunchedEffect(ingredients) {
         scope.launch {
@@ -94,7 +97,7 @@ fun RecipeScreen(ingredients: String) {
                                 thresholds = { _, _ -> FractionalThreshold(0.3f) },
                                 orientation = Orientation.Horizontal
                             ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Box(
                             modifier = Modifier.padding(16.dp),
@@ -117,7 +120,12 @@ fun RecipeScreen(ingredients: String) {
                     LaunchedEffect(swipeableState.currentValue) {
                         when (swipeableState.currentValue) {
                             1 -> { // Swiped Right
-                                // Add to favourites later
+                                val oldFavourites = prefs.getFavourites().toMutableList()
+                                val newRecipe = recipes[index]
+                                if (!oldFavourites.contains(newRecipe)) {
+                                    oldFavourites.add(newRecipe)
+                                }
+                                prefs.saveFavourites(oldFavourites)
                                 recipes.removeAt(index)
                             }
 
