@@ -1,7 +1,10 @@
 package com.example.aahar.screens
 
+import android.R
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
@@ -60,10 +64,15 @@ fun RecipeScreen(ingredients: String) {
                 val sizePx = with(LocalDensity.current) { 300.dp.toPx() }
                 val anchors = mapOf(0f to 0, -sizePx to -1, sizePx to 1)
 
+                val parts = recipe.split("*").filter { it.isNotBlank() }
+                val title = parts.getOrNull(0) ?: ""
+                val description = parts.getOrNull(1) ?: ""
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .height(300.dp)
+                        .padding(16.dp)
                         .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
                         .swipeable(
                             state = swipeableState,
@@ -73,8 +82,19 @@ fun RecipeScreen(ingredients: String) {
                         ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(recipe, style = MaterialTheme.typography.headlineSmall)
+                    Box(modifier = Modifier.padding(16.dp),
+                        contentAlignment = Alignment.Center) {
+                        Column {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = description,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
 
