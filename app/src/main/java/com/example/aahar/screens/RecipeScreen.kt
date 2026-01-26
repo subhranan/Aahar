@@ -1,6 +1,7 @@
 package com.example.aahar.screens
 
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,7 @@ fun RecipeScreen(context: Context, ingredients: String) {
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
     val prefs = PrefsHelper(context)
+    var showStatsDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(ingredients) {
         scope.launch {
@@ -61,6 +63,21 @@ fun RecipeScreen(context: Context, ingredients: String) {
 
     Scaffold(
     ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(48.dp),
+            contentAlignment = Alignment.TopEnd
+        ) {
+            Text(
+                text = "View stats",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    showStatsDialog = true
+                }
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -146,5 +163,11 @@ fun RecipeScreen(context: Context, ingredients: String) {
                 }
             }
         }
+        if (showStatsDialog) {                      // NEW: show dialog condition
+            StatsDialog(
+                onDismiss = { showStatsDialog = false } // NEW: close dialog
+            )
+        }
+
     }
 }
